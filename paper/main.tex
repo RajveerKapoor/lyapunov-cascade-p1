@@ -35,27 +35,28 @@ renormalization cascade of finite-time Lyapunov distributions:\\[2mm]
 \begin{abstract}
 \noindent
 We study a renormalization cascade $T$ on distributions of finite-time Lyapunov exponents (FTLEs):
-at each level, samples are replaced by mean-normalized absolute differences of independent pairs and a
-maximum-likelihood tail exponent is read off. The operator arose in our own large-scale computational
-study of double-pendulum chaos, where its limit $\alpha^*\!\approx\!4$ was conjectured to be a new
-universal constant; here we give it an exact theory. The exponential distribution is the \emph{unique}
-exact fixed point of $T$ (Puri--Rubin), with a closed-form reading
+at each level, samples are replaced by mean-normalized absolute differences of independent pairs, and
+a maximum-likelihood tail exponent is read off. The operator first turned up in our own large-scale
+computational study of double-pendulum chaos, where its limit $\alpha^*\!\approx\!4$ was conjectured to
+be a new universal constant. We give it an exact theory here. The exponential distribution turns out
+to be the \emph{unique} exact fixed point of $T$ (Puri--Rubin), with a closed-form reading
 $\alpha^*_{\Exp}(f)=1+[\tfrac1f E_1(\ln\tfrac1f)]^{-1}=3.3494$ at $f=0.2$, confirmed to
-$0.02\%$--$0.3\%$; and \emph{every} Gaussian bulk collapses in a single step to one universal
-half-normal shape. Linearizing $T$ exactly, the symmetrization step halves excess kurtosis per level
---- which \emph{derives} the previously-empirical ``universal'' decay constant $r\approx1/2$ --- atop a
-gapless, non-normal spectrum ($\mu(s)=2/(2-s)$ over a unit-diagonal polynomial tower) whose measured
-consequence is algebraic relaxation and metastable plateaus. The celebrated ``$\alpha^*\!\approx\!4$''
-is therefore a plateau reading of a marginal flow, not an asymptotic constant, and the operator is
-provably not a tail-index estimator. What survives is sharper: a \emph{two-class split of chaotic
-dynamics}. Across eleven FTLE ensembles from five systems, mixed-phase dynamics yields broad,
-\emph{platykurtic} FTLE bulks that read strictly \emph{above} the exponential fixed point, while fully
-chaotic, dissipative and near-regular dynamics yield \emph{leptokurtic} bulks that read \emph{below}
-it --- a sign-perfect separation ($11/11$; sign test $p=0.001$; Cohen's $d=3.3$ on a
-same-map/same-protocol control) with statistically zero within-class heterogeneity. An out-of-sample
-H\'enon--Heiles sweep, predicted in advance, flips its matched-null excess exactly where phase space
-turns from a thin chaotic web to a mixed sea. The FTLE distribution's shape, read against an exactly
-known reference point, is a cheap and sensitive probe of a system's ergodic architecture.
+$0.02\%$--$0.3\%$, and \emph{every} Gaussian bulk collapses in a single step onto one universal
+half-normal shape. Once $T$ is linearized exactly, the symmetrization step is seen to halve excess
+kurtosis at each level, which \emph{derives} the previously empirical ``universal'' decay constant
+$r\approx1/2$; underneath sits a gapless, non-normal spectrum ($\mu(s)=2/(2-s)$ over a unit-diagonal
+polynomial tower) whose measured consequence is algebraic relaxation and metastable plateaus. So the
+celebrated ``$\alpha^*\!\approx\!4$'' is a plateau reading of a marginal flow rather than an asymptotic
+constant, and the operator is provably not a tail-index estimator. What survives this reckoning is, if
+anything, sharper: a \emph{two-class split of chaotic dynamics}. Across eleven FTLE ensembles from five
+systems, mixed-phase dynamics yields broad, \emph{platykurtic} FTLE bulks that read strictly
+\emph{above} the exponential fixed point, while fully chaotic, dissipative and near-regular dynamics
+yield \emph{leptokurtic} bulks that read \emph{below} it. The separation is sign-perfect ($11/11$; sign
+test $p=0.001$; Cohen's $d=3.3$ on a same-map/same-protocol control) with statistically zero
+within-class heterogeneity. An out-of-sample H\'enon--Heiles sweep, predicted in advance, flips its
+matched-null excess exactly where phase space turns from a thin chaotic web to a mixed sea. Read
+against an exactly known reference point, the shape of the FTLE distribution turns out to be a cheap
+and sensitive probe of a system's ergodic architecture.
 \end{abstract}
 
 \vspace{4pt}\noindent\textbf{Keywords:} finite-time Lyapunov exponents; chaotic Hamiltonian dynamics;
@@ -67,33 +68,32 @@ theory; universality class; metastable plateaus
 %======================================================================
 \section{Introduction}\label{sec:intro}
 
-The distribution of finite-time Lyapunov exponents (FTLEs) is one of the most information-rich
-observables of a chaotic system. Its mean estimates the leading Lyapunov exponent
-\cite{oseledec,benettin}; its width and shape encode the fluctuations of local expansion rates and,
-through large-deviation theory, the multifractality of the invariant measure
-\cite{grassberger,prasad,pikovsky,ott}. In Hamiltonian systems with mixed phase space, trajectories
-intermittently trapped near regular islands depress their finite-time exponents, producing
-long-lived non-Gaussian structure \cite{zaslavsky,meiss}; the associated algebraic decay of
-Poincar\'e recurrences is itself conjectured universal \cite{chirikovshep,cristadoro}.
+The distribution of finite-time Lyapunov exponents (FTLEs) is one of the richest observables a
+chaotic system offers. Its mean gives the leading Lyapunov exponent \cite{oseledec,benettin}, while
+its width and shape carry the fluctuations of local expansion rates and, via large-deviation theory,
+the multifractality of the invariant measure \cite{grassberger,prasad,pikovsky,ott}. In Hamiltonian
+systems with a mixed phase space, trajectories that get intermittently trapped near regular islands
+have their finite-time exponents depressed, which produces long-lived non-Gaussian structure
+\cite{zaslavsky,meiss}. The associated algebraic decay of Poincar\'e recurrences is itself conjectured
+to be universal \cite{chirikovshep,cristadoro}.
 
-This paper concerns a specific, deceptively simple \emph{renormalization cascade} on FTLE
-distributions that emerged from our own large-scale computational study of double-pendulum chaos
+This paper is about a specific, deceptively simple \emph{renormalization cascade} on FTLE
+distributions, one that emerged from our own large-scale computational study of double-pendulum chaos
 \cite{shinbrot,stachowiakNote} (hereafter, the \emph{source program}). Starting from the chaotic
-subset of an FTLE sample, the operator
-repeatedly (i) fits a maximum-likelihood power-law exponent to the upper tail, and (ii)
-coarse-grains the sample by replacing it with mean-normalized absolute differences of independent
-pairs. The per-level exponents $\alpha_k$ were observed to converge geometrically to a limit
-$\alpha^*\!\approx\!4$, robust across hundreds of double-pendulum parameter combinations, and this
-value --- together with a companion level-zero exponent $\alpha_0\!\approx\!8.3$ --- was conjectured
-to be a new universal constant of chaotic Hamiltonian dynamics. We subsequently re-measured this
-claim family ourselves at $n=5\times10^{5}$--$5\times10^{6}$ per system, which sharpened the empirical
-picture in two directions: the
-$\alpha^*$ landscape over double-pendulum parameter space is statistically \emph{flat} (no ridge
-structure survives a noise null), and a class of dynamically distinct systems --- the dissipative
-Lorenz-63 attractor, the fully chaotic standard map at $K=5$, and a near-regular coupled quartic
-oscillator --- cluster at a sharply \emph{different} fixed point, $\alpha^*\!\approx\!3.0$--$3.3$,
-while mixed-phase systems (the double pendulum family and the standard map just above the
-connectedness threshold, $K=1$) cluster near $3.9$--$4.4$ \cite{note-registry}.
+subset of an FTLE sample, the operator repeatedly (i) fits a maximum-likelihood power-law exponent to
+the upper tail, and (ii) coarse-grains the sample by replacing it with mean-normalized absolute
+differences of independent pairs. The per-level exponents $\alpha_k$ were observed to converge
+geometrically to a limit $\alpha^*\!\approx\!4$, robust across hundreds of double-pendulum parameter
+combinations. Together with a companion level-zero exponent $\alpha_0\!\approx\!8.3$, this value was
+conjectured to be a new universal constant of chaotic Hamiltonian dynamics. We subsequently
+re-measured the whole claim family ourselves at $n=5\times10^{5}$--$5\times10^{6}$ per system, and the
+picture sharpened in two directions. First, the $\alpha^*$ landscape over double-pendulum parameter
+space turned out to be statistically \emph{flat}: no ridge structure survives a noise null. Second, a
+class of dynamically distinct systems, namely the dissipative Lorenz-63 attractor, the fully chaotic
+standard map at $K=5$, and a near-regular coupled quartic oscillator, clusters at a sharply
+\emph{different} fixed point, $\alpha^*\!\approx\!3.0$--$3.3$, while mixed-phase systems (the double
+pendulum family and the standard map just above the connectedness threshold, $K=1$) cluster near
+$3.9$--$4.4$ \cite{note-registry}.
 
 Two questions therefore demanded an answer. \emph{What does this operator actually measure?} And
 \emph{is the two-class structure a property of the dynamics or of the statistics?} We answer both.
@@ -101,74 +101,74 @@ Two questions therefore demanded an answer. \emph{What does this operator actual
 \paragraph{Contributions.}
 \begin{enumerate}\itemsep2pt
 \item \textbf{Exact fixed point (Theorem~\ref{thm:exp}).} The exponential distribution is an exact
-fixed point of the cascade map, including its mean normalization; by the characterization theorem of
-Puri and Rubin \cite{purirubin} it is the \emph{unique} distribution satisfying
-$|X-Y|\eqd X$. The folding identity behind it is elementary and, to our knowledge, has not
-previously been connected to Lyapunov statistics.
-\item \textbf{Closed-form readings (Propositions~\ref{prop:reading}, \ref{prop:gauss0}).} The
-maximum-likelihood tail exponent that the pipeline assigns to the exponential fixed point is
-derived in closed form, $\alpha^*_{\Exp}(f)=1+[\tfrac1f E_1(\ln\tfrac1f)]^{-1}$
-($=3.3494$ at $f=0.2$), and confirmed numerically to $0.02\%$. Companion formulas for the
-half-normal ($4.4448$), the uniform ($9.6417$), and a first-order level-zero law for Gaussian bulks,
-$\alpha_0 \approx 1 + (\cv^{-1}+z_f)/m_f$, are likewise derived and confirmed.
+fixed point of the cascade map, including its mean normalization. By the characterization theorem of
+Puri and Rubin \cite{purirubin}, it is in fact the \emph{unique} distribution satisfying
+$|X-Y|\eqd X$. The folding identity behind this is elementary and, as far as we know, had not been
+connected to Lyapunov statistics before.
+\item \textbf{Closed-form readings (Propositions~\ref{prop:reading}, \ref{prop:gauss0}).} We derive
+in closed form the maximum-likelihood tail exponent that the pipeline assigns to the exponential
+fixed point, $\alpha^*_{\Exp}(f)=1+[\tfrac1f E_1(\ln\tfrac1f)]^{-1}$ ($=3.3494$ at $f=0.2$), confirmed
+numerically to $0.02\%$. Companion formulas follow for the half-normal ($4.4448$), the uniform
+($9.6417$), and a first-order level-zero law for Gaussian bulks,
+$\alpha_0 \approx 1 + (\cv^{-1}+z_f)/m_f$, each likewise confirmed.
 \item \textbf{Universal Gaussian collapse (Theorem~\ref{thm:gauss}).} Because the location parameter
-cancels in pair differences, \emph{every} Gaussian bulk is mapped in one cascade step to the same
-half-normal shape. All Gaussian-seeded flows therefore coincide from level one onward --- measured:
-$\alpha_1 = 4.448$--$4.455$ across coefficients of variation $0.05$--$0.33$ --- and define a single
+cancels in pair differences, \emph{every} Gaussian bulk lands, after just one cascade step, on the
+same half-normal shape. All Gaussian-seeded flows therefore coincide from level one onward (measured:
+$\alpha_1 = 4.448$--$4.455$ across coefficients of variation $0.05$--$0.33$), tracing out a single
 slow relaxation manifold toward the exponential fixed point.
-\item \textbf{Metastability (\S\ref{sec:metastable}).} Deep cascades ($n=1.6\times10^{7}$, 20
-levels) show the Gaussian-seeded flow's Kolmogorov distance to the exponential collapsing from
-$0.34$ to $0.03$ within five levels and then \emph{stalling} at $0.02$--$0.03$ for at least eight
-more, while the fitted exponent drifts slowly ($\approx-0.04$ per level) through precisely the range
-in which the empirical ``constants'' were reported. The $n$-dependence of the double-pendulum
-plateau ($4.64 \to 4.12 \to 3.88$ for $n=5\times10^4 \to 5\times10^5 \to 5\times10^6$) rides this
-drift. ``$\alpha^*\approx4$'' is a metastable plateau reading, not an asymptotic constant.
+\item \textbf{Metastability (\S\ref{sec:metastable}).} In deep cascades ($n=1.6\times10^{7}$, 20
+levels), the Gaussian-seeded flow's Kolmogorov distance to the exponential collapses from $0.34$ to
+$0.03$ within five levels and then \emph{stalls} at $0.02$--$0.03$ for at least eight more, while the
+fitted exponent drifts slowly ($\approx-0.04$ per level) through precisely the range in which the
+empirical ``constants'' were reported. The $n$-dependence of the double-pendulum plateau
+($4.64 \to 4.12 \to 3.88$ for $n=5\times10^4 \to 5\times10^5 \to 5\times10^6$) rides this same drift.
+So ``$\alpha^*\approx4$'' turns out to be a metastable plateau reading, not an asymptotic constant.
 \item \textbf{The operator is not a tail estimator (\S\ref{sec:calibration}).} Genuine Pareto tails
-are asymptotically conserved by the cascade (Proposition~\ref{prop:conserve}) but are \emph{not}
-recovered by the finite-window fit: pure Pareto inputs with survival indices $2.5/4/6$ read
-$2.4/2.7/2.9$ after one step. Any interpretation of $\alpha^*$ as a physical tail index is
-untenable.
+are asymptotically conserved by the cascade (Proposition~\ref{prop:conserve}), yet they are
+\emph{not} recovered by the finite-window fit: pure Pareto inputs with survival indices $2.5/4/6$
+read $2.4/2.7/2.9$ after one step. Reading $\alpha^*$ as a physical tail index, then, is untenable.
 \item \textbf{The two-class split is real, and its mechanism is identified
 (\S\ref{sec:twoclass}).} Across eleven ensembles from five systems, mixed-phase dynamics produces
 broad, near-symmetric, \emph{platykurtic} FTLE bulks (excess kurtosis $-1.0$ to $-1.3$) that read
 strictly above the exponential fixed point, while non-mixed dynamics produces narrow or skewed
 \emph{leptokurtic} bulks (excess kurtosis $+1.3$ to $+43$) that read below it. A per-system
-matched-Gaussian null --- a folded Gaussian with the system's own mean and variance --- gives a
-sign-perfect separation ($11/11$ ensembles, $p=0.001$; $8/8$ systems, $p=0.008$). The contrast
-survives the sharpest available control: the same map, integrator, horizon and $n$ at $K=1$
-(mixed) versus $K=5$ (fully chaotic). A random-effects meta-analysis finds within-class
-heterogeneity indistinguishable from zero ($\tau^2$ CI $[0, 0.012]$, Cochran $p=0.36$), so the split
-is a \emph{discrete class boundary}, not a soft gradient.
+matched-Gaussian null (a folded Gaussian sharing the system's own mean and variance) gives a
+sign-perfect separation ($11/11$ ensembles, $p=0.001$; $8/8$ systems, $p=0.008$), and the contrast
+survives the sharpest available control: the same map, integrator, horizon and $n$ at $K=1$ (mixed)
+versus $K=5$ (fully chaotic). A random-effects meta-analysis finds within-class heterogeneity
+indistinguishable from zero ($\tau^2$ CI $[0, 0.012]$, Cochran $p=0.36$), so the split looks like a
+\emph{discrete class boundary}, not a soft gradient.
 \item \textbf{Exact linearization; the decay constant $r \approx 1/2$ derived
 (\S\ref{sec:linear}).} The symmetrization step $A - B$ annihilates all odd cumulants and rescales
 the standardized cumulant of order $2m$ by exactly $2^{1-m}$: excess kurtosis halves per step,
 verified on pendulum data to three decimals. This derives the source program's second empirical
-constant --- the ``nearly universal'' geometric decay $r \approx 0.46$--$0.51$ of the cascade fit,
-i.e.\ $\log_2 r \approx -1$. The linearized operator at the fixed point has the closed-form
-eigenfamily $\mu(s) = 2/(2-s)$ and a unit-diagonal triangular action on polynomials: no spectral
-gap, hence \emph{algebraic} relaxation (measured $d_k \sim k^{-0.5}$) and metastable plateaus.
+constant, the ``nearly universal'' geometric decay $r \approx 0.46$--$0.51$ of the cascade fit, i.e.\
+$\log_2 r \approx -1$. The linearized operator at the fixed point has the closed-form eigenfamily
+$\mu(s) = 2/(2-s)$ and a unit-diagonal triangular action on polynomials, so there is no spectral gap;
+relaxation is therefore \emph{algebraic} (measured $d_k \sim k^{-0.5}$), producing metastable
+plateaus.
 \item \textbf{What the pendulum constants are: frozen ensemble statistics
 (\S\ref{sec:ensemble}).} Across horizons $T = 5$--$200$ the chaotic-subset FTLE variance does not
 decay at all ($\beta = -0.014$, fit RMS $0.002$, against $\mathrm{var} \sim T^{-\beta}$; CLT
 self-averaging predicts $\beta = 1$). The canonical release ensemble (uniform angles, zero
-velocity) is revealed as a mixture over energy shells --- $E(\theta)$ explains
-$\eta^2 = 0.41$--$0.43$ of the variance --- and over invariant components within shells (the
-remaining $59\%$, equally frozen). Energy bands internally recapitulate the entire two-class
-taxonomy within one system.
+velocity) turns out to be a mixture over energy shells ($E(\theta)$ explains
+$\eta^2 = 0.41$--$0.43$ of the variance) and over invariant components within shells (the remaining
+$59\%$, equally frozen). Energy bands internally recapitulate the entire two-class taxonomy within
+one system.
 \item \textbf{Out-of-sample validation: H\'enon--Heiles across its transition
-(\S\ref{sec:hh}).} A fresh symplectic-variational implementation of the H\'enon--Heiles system
-(named in advance as a falsifiable prediction of the classifier, before the experiment was built)
+(\S\ref{sec:hh}).} A fresh symplectic-variational implementation of the H\'enon--Heiles system,
+named in advance as a falsifiable prediction of the classifier before the experiment was even built,
 shows the matched-null excess flipping sign precisely where phase space transitions from a thin
-chaotic web to a fat mixed sea, with the platykurtic signature switching on alongside it.
+chaotic web to a fat mixed sea, with the platykurtic signature switching on right alongside it.
 \end{enumerate}
 
-Section~\ref{sec:operator} develops the exact theory; \S\ref{sec:protocols} describes systems,
-integrators, and statistical protocols; \S\ref{sec:calibration} calibrates the operator on synthetic
-ensembles; \S\ref{sec:twoclass} presents the two-class result; \S\ref{sec:metastable} quantifies
-metastability and demystifies the original constants; \S\ref{sec:mechanism} discusses the dynamical
-mechanism and predictions; \S\ref{sec:numbers} is a number-theoretic audit of every constant
-appearing in this work; \S\ref{sec:conclusions} concludes. Appendices contain derivations, data
-provenance, the full calibration table, and estimator pathologies.
+Section~\ref{sec:operator} develops the exact theory. \S\ref{sec:protocols} describes systems,
+integrators, and statistical protocols, and \S\ref{sec:calibration} calibrates the operator on
+synthetic ensembles. \S\ref{sec:twoclass} presents the two-class result; \S\ref{sec:metastable}
+quantifies metastability and demystifies the original constants; and \S\ref{sec:mechanism} discusses
+the dynamical mechanism and predictions. \S\ref{sec:numbers} is a number-theoretic audit of every
+constant appearing in this work, and \S\ref{sec:conclusions} concludes. The appendices contain
+derivations, data provenance, the full calibration table, and estimator pathologies.
 
 %======================================================================
 \section{The cascade operator and its exact structure}\label{sec:operator}
@@ -240,10 +240,10 @@ excess of $A$ over an independent copy, and the exponential is the unique memory
 \begin{remark}
 Fixed shapes of $T$ satisfy the more general equation $|A-B| \eqd cX$ with
 $c = \mathbb{E}|A-B|/\mathbb{E}X \in (0,1]$, and $c=1$ forces the exponential by
-\cite{purirubin}. We are not aware of a classification for $c<1$; among the seventeen synthetic
-families tested below we find no other attracting fixed shape, only \emph{slow manifolds}
-(\S\ref{sec:metastable}). A rigorous basin/spectral analysis of $T$ at $\Exp$ is an open problem we
-commend to the reader (\S\ref{sec:mechanism}).
+\cite{purirubin}. No classification for $c<1$ is known to us. Among the seventeen synthetic families
+tested below, we find no other attracting fixed shape, only \emph{slow manifolds}
+(\S\ref{sec:metastable}); a rigorous basin/spectral analysis of $T$ at $\Exp$ remains open, and we
+leave it to the reader (\S\ref{sec:mechanism}).
 \end{remark}
 
 \subsection{Closed-form readings}
@@ -264,11 +264,10 @@ $\mathbb{E}\ln(X/u_F \,|\, X>u_F) = \mathbb{E}\ln(1+E/u_F) = \int_0^\infty e^{-t
 \eqref{eq:etaF}.
 \end{proof}
 
-Because $\Exp$ is a fixed point, \eqref{eq:reading} is simultaneously the level-zero reading and
-the $k\to\infty$ reading of an exponential seed --- a sharp, parameter-free prediction. It is
-confirmed to $0.02\%$--$0.3\%$ (Table~\ref{tab:analytic}); the flatness of the measured exponential
-cascade over 14 levels (5M seed: $3.3462, 3.3455, 3.3445, 3.3495, \dots$) is the fixed-point
-signature in its rawest form.
+Because $\Exp$ is a fixed point, \eqref{eq:reading} is simultaneously the level-zero reading and the
+$k\to\infty$ reading of an exponential seed, a sharp, parameter-free prediction. Table~\ref{tab:analytic}
+confirms it to $0.02\%$--$0.3\%$, and the flatness of the measured exponential cascade over 14 levels
+(5M seed: $3.3462, 3.3455, 3.3445, 3.3495, \dots$) is the fixed-point signature in its rawest form.
 
 \begin{table}[t]
 \centering\small
@@ -308,9 +307,9 @@ $\mathbb{E}X \approx \mu$ gives the claim; the correction is $O(\Phi(-\mu/\sigma
 
 This explains, at a stroke, why the empirical study found the \emph{same} convergence pattern across
 so many parameter combinations: any near-Gaussian FTLE bulk forgets its width in one cascade step.
-Measured level-1 values across seeds and widths agree with the derived $4.4448$ to
-$\le0.3\%$ (Table~\ref{tab:analytic}); at $\cv = 0.6$ the folded mass ($\approx 5\%$) shifts
-$\alpha_1$ to $4.60$, quantifying the stated correction.
+Measured level-1 values across seeds and widths agree with the derived $4.4448$ to $\le0.3\%$
+(Table~\ref{tab:analytic}), and at $\cv = 0.6$ the folded mass ($\approx 5\%$) shifts $\alpha_1$ to
+$4.60$, which is exactly the size of correction the theory predicts.
 
 \begin{proposition}[first-order level-zero law for Gaussian bulks]\label{prop:gauss0}
 For $X = |N(\mu,\sigma^2)|$ with $\cv = \sigma/\mu$ small, writing $z_f = \Phi^{-1}(1-f)$ and
@@ -329,9 +328,9 @@ $(1-f)$-quantile is $\sigma m_f$ and $u = \mu + \sigma z_f$.
 On \emph{exact} folded-Gaussian ensembles matched to each dynamical system (\S\ref{sec:twoclass})
 this law predicts $\alpha_0$ to $3$--$5\%$ across two orders of magnitude of $\cv$ (predicted/measured:
 $75.5/76.4$ at $\cv=0.025$; $32.3/33.2$ at $0.060$; $13.0/13.7$ at $0.171$; $5.5/5.8$ at $0.59$).
-Its physical import: \emph{the level-zero exponent $\alpha_0$ is a bulk-width statistic}, not a tail
-exponent --- $\alpha_0 \approx 8$ corresponds to nothing deeper than $\cv \approx 0.6$--$0.7$ bulk
-via \eqref{eq:gauss0} corrected for the platykurtic shape (\S\ref{sec:twoclass}).
+Physically, this means \emph{the level-zero exponent $\alpha_0$ is a bulk-width statistic}, not a tail
+exponent: $\alpha_0 \approx 8$ corresponds to nothing deeper than $\cv \approx 0.6$--$0.7$ bulk via
+\eqref{eq:gauss0} corrected for the platykurtic shape (\S\ref{sec:twoclass}).
 
 \subsection{Tail conservation --- and why it is not realized}
 
@@ -351,12 +350,12 @@ rescaling (Lemma~\ref{lem:scale}).
 One might conclude the cascade limit \emph{measures} $a$. It does not. The finite window
 ($f = 0.2$) reads the post-differencing \emph{bulk}: pure Pareto seeds with survival indices
 $a = 2.5 / 4 / 6$ (level-0 readings $3.5 / 5.0 / 7.0$, i.e.\ $a{+}1$ as expected) collapse after a
-single differencing step to flat sequences reading $2.4 / 2.7 / 2.9$ --- far below $a + 1$ and only
+single differencing step to flat sequences reading $2.4 / 2.7 / 2.9$, far below $a + 1$ and only
 weakly ordered in $a$ (\S\ref{sec:calibration}, Fig.~\ref{fig:conservation}). Bulk-plus-tail
-mixtures behave likewise. \emph{The operator is a bulk-shape reader; it is not a tail-index
-estimator at any practical window.} Claims that cascade limits equal raw tail exponents are thereby
-foreclosed --- consistently, direct Hill estimates of the same ensembles' raw upper tails give
-values ($\sim$11--22) unrelated to any cascade reading.
+mixtures behave the same way. \emph{The operator is a bulk-shape reader; it is not a tail-index
+estimator at any practical window.} This forecloses claims that cascade limits equal raw tail
+exponents; consistently, direct Hill estimates of the same ensembles' raw upper tails give values
+($\sim$11--22) unrelated to any cascade reading.
 
 \subsection{The linearized cascade: exact cumulant flow and a gapless, non-normal
 spectrum}\label{sec:linear}
@@ -380,16 +379,16 @@ Cumulants of independent sums add and are homogeneous: $\kappa_n(A - B) = \kappa
 (-1)^n \kappa_n(B) = (1 + (-1)^n)\,\kappa_n$. Divide by $\kappa_2(D)^m = (2\kappa_2)^m$.
 \end{proof}
 
-Measured on the double-pendulum ensemble ($n = 5\times10^{5}$, level 0):
-excess kurtosis of the signed differences $= -0.6442$ against the predicted
-$-1.2896/2 = -0.6448$, with skewness $10^{-4}$; the identity holds at every level and for every
-seed tested within sampling error (Appendix~\ref{app:data} scripts). Its dynamical consequence:
-in the early cascade, where the deviation from the fixed point is carried by low-order cumulants,
-the fitted geometric ratio of the exponent sequence is pinned near $1/2$. This \emph{derives} the
-source program's second celebrated constant --- a decay rate reported as ``$r \approx 0.46$,
-nearly constant across all systems'' (canonical fit $0.5061$; legacy published $0.4565$; 49-config
-mean $0.4595$; our synthetic families $0.48$--$0.67$ on early windows), i.e.\
-$\log_2 r \approx -1$ with computable corrections from higher cumulants and the folding step.
+Measured on the double-pendulum ensemble ($n = 5\times10^{5}$, level 0), excess kurtosis of the
+signed differences comes out to $-0.6442$ against the predicted $-1.2896/2 = -0.6448$, with skewness
+$10^{-4}$; the identity holds at every level and for every seed tested, within sampling error
+(Appendix~\ref{app:data} scripts). Dynamically, this matters because in the early cascade, where the
+deviation from the fixed point is still carried by low-order cumulants, the fitted geometric ratio of
+the exponent sequence gets pinned near $1/2$. This \emph{derives} the source program's second
+celebrated constant, a decay rate reported as ``$r \approx 0.46$, nearly constant across all
+systems'' (canonical fit $0.5061$; legacy published $0.4565$; 49-config mean $0.4595$; our synthetic
+families $0.48$--$0.67$ on early windows), i.e.\ $\log_2 r \approx -1$ with computable corrections
+from higher cumulants and the folding step.
 
 \begin{proposition}[linearization at the fixed point]\label{prop:linop}
 Write level densities as $e^{-z}\bigl(1 + \varepsilon h(z)\bigr)$. To first order in
@@ -413,22 +412,22 @@ $2\int_0^\infty e^{-2x} e^{s(x+z)}\dd x = \tfrac{2}{2-s} e^{sz}$. For $z^m$, exp
 $(x + z)^m$ and integrate term by term; the $z^m$ coefficient is $2\int_0^\infty e^{-2x}\dd x = 1$.
 \end{proof}
 
-Numerically (discretized kernel, $900$ points): $\mu(s)$ at $s = -0.5, -1, -2, -4$ measures
-$0.8008$, $0.6677$, $0.5013$, $0.3353$ against the exact $0.8$, $\tfrac23$, $0.5$, $\tfrac13$,
-and the polynomial leading coefficient is $1.0007$. Three structural consequences follow. \emph{First},
-the kernel in \eqref{eq:linop} is one-sided (Volterra-type): the operator is far from
-self-adjoint, and finite discretizations are defective --- their matrix eigenvalues collapse toward
-the diagonal and do not see the eigenfamily; the operator's behaviour is governed by its
-pseudo-spectrum, not its spectrum. \emph{Second}, the unit diagonal on the polynomial tower means
-there is \emph{no spectral gap below $1$}: linear stability is marginal. \emph{Third}, marginal
-non-normal flows relax \emph{algebraically}, not geometrically --- exactly what is measured: the
-Gaussian-seeded deep cascade's Kolmogorov distance to the fixed point follows
-$d_k \sim k^{-\theta}$ with $\theta = 0.55$--$0.58$ (log--log RMS $3\times$ smaller than the best
-geometric fit); an independent uniform-seeded run ($n = 8\times10^{6}$) is compatible, and even
-read geometrically decays no faster than $0.88$ per level. The metastable plateaus of
-\S\ref{sec:metastable} are the quantitative face of this gapless linearization: fast transient
-(cumulant halving, $r \approx 1/2$) followed by marginal drift ($k^{-1/2}$-type), so that
-\emph{every} finite-depth experiment reads a plateau.
+Numerically (discretized kernel, $900$ points), $\mu(s)$ at $s = -0.5, -1, -2, -4$ measures
+$0.8008$, $0.6677$, $0.5013$, $0.3353$ against the exact $0.8$, $\tfrac23$, $0.5$, $\tfrac13$, and
+the polynomial leading coefficient is $1.0007$. This structure has three consequences. The kernel in
+\eqref{eq:linop} is one-sided (Volterra-type), so the operator is far from self-adjoint, and finite
+discretizations are defective: their matrix eigenvalues collapse toward the diagonal and miss the
+eigenfamily entirely, meaning the operator's behaviour is governed by its pseudo-spectrum rather than
+its spectrum. The unit diagonal on the polynomial tower further means there is \emph{no spectral gap
+below $1$}, so linear stability is marginal. And because marginal non-normal flows relax
+\emph{algebraically} rather than geometrically, that is exactly what shows up in the data: the
+Gaussian-seeded deep cascade's Kolmogorov distance to the fixed point follows $d_k \sim k^{-\theta}$
+with $\theta = 0.55$--$0.58$ (log--log RMS $3\times$ smaller than the best geometric fit), an
+independent uniform-seeded run ($n = 8\times10^{6}$) is compatible, and even read geometrically it
+decays no faster than $0.88$ per level. The metastable plateaus of \S\ref{sec:metastable} are the
+quantitative face of this gapless linearization: a fast transient (cumulant halving, $r \approx 1/2$)
+followed by marginal drift ($k^{-1/2}$-type), so that \emph{every} finite-depth experiment ends up
+reading a plateau.
 
 %======================================================================
 \section{Systems, data and statistical protocol}\label{sec:protocols}
@@ -481,26 +480,26 @@ authors and bear no responsibility for the content.
 Seventeen synthetic families ($n = 5\times10^{5}$ each; Appendix~\ref{app:battery} for the full
 table) calibrate what the cascade responds to.
 
-\paragraph{The exponential is flat; the fit can lie.} The $\Exp(1)$ cascade is flat at
-$3.35$ for as many levels as sampling permits --- 14 levels at $n=5\times10^{6}$ with the geometric
-fit returning $\alpha^* = 3.3507$, against the derived $3.3494$. At $n=5\times10^{5}$ the same flat
-sequence defeats the three-parameter fit (it runs to its parameter bounds, reporting
-$\alpha^* = 10.5$--$12$ with $r \to 1$); the plateau statistic returns $3.32$--$3.35$. All
-quantitative claims below therefore quote the plateau alongside the fit
+\paragraph{The exponential is flat; the fit can lie.} The $\Exp(1)$ cascade sits flat at $3.35$ for
+as many levels as sampling permits: 14 levels at $n=5\times10^{6}$, with the geometric fit returning
+$\alpha^* = 3.3507$ against the derived $3.3494$. At $n=5\times10^{5}$, though, that same flat
+sequence defeats the three-parameter fit; it runs to its parameter bounds and reports
+$\alpha^* = 10.5$--$12$ with $r \to 1$, while the plateau statistic still returns $3.32$--$3.35$. For
+this reason, every quantitative claim below quotes the plateau alongside the fit
 (Appendix~\ref{app:pathologies}).
 
 \paragraph{One Gaussian flow.} Gaussian bulks of any width collapse onto the single half-normal-seeded
 flow (Theorem~\ref{thm:gauss}): measured $\alpha_1 = 4.448$--$4.455$ across $\cv = 0.05$--$0.33$,
-then $4.11 \to 3.94 \to 3.84 \to 3.81 \to \dots$ --- a slow descent toward the exponential reading,
-still at $\approx 3.57$ ten levels in ($1.6\times10^{7}$-point seed) and $\approx 3.30$ at level 15
-(Fig.~\ref{fig:flows}; \S\ref{sec:metastable}).
+then $4.11 \to 3.94 \to 3.84 \to 3.81 \to \dots$, a slow descent toward the exponential reading that
+is still at $\approx 3.57$ ten levels in ($1.6\times10^{7}$-point seed) and reaches $\approx 3.30$
+only at level 15 (Fig.~\ref{fig:flows}; \S\ref{sec:metastable}).
 
-\paragraph{Skew selects the side of approach.} Right-skewed, leptokurtic families approach the
-fixed point \emph{from below} and linger there: lognormal($\sigma{=}0.5$) descends to $3.10$--$3.24$;
-lognormal($\sigma{=}1$) sits flat at $2.7$ for ten levels; Weibull($k{=}0.7$) ascends
-$2.64 \to 3.3$. Bounded flat-topped inputs read \emph{high} (uniform: level-0 $9.61$, plateau
-$\approx 4.1$). The taxonomy --- flat-topped/platykurtic above, peaked/skewed below, exponential
-exactly at $\eta_f(\Exp)$ --- is the calibration key for \S\ref{sec:twoclass}.
+\paragraph{Skew selects the side of approach.} Right-skewed, leptokurtic families approach the fixed
+point \emph{from below} and linger there: lognormal($\sigma{=}0.5$) descends to $3.10$--$3.24$;
+lognormal($\sigma{=}1$) sits flat at $2.7$ for ten levels; Weibull($k{=}0.7$) climbs
+$2.64 \to 3.3$. Bounded, flat-topped inputs read \emph{high} instead (uniform: level-0 $9.61$,
+plateau $\approx 4.1$). This taxonomy, flat-topped/platykurtic above and peaked/skewed below, with the
+exponential sitting exactly at $\eta_f(\Exp)$, is the calibration key for \S\ref{sec:twoclass}.
 
 \begin{figure}[t]
 \centering
@@ -525,13 +524,13 @@ light-tailed (Gumbel-domain) seeds. The operator reads bulk shape, not tails.}
 \end{figure}
 
 \paragraph{Window dependence.} The reading of \emph{any} light-tailed shape slides steeply with the
-tail fraction (\eqref{eq:reading}: $4.09 \to 3.35 \to 2.91$ for $f = 0.1 \to 0.3$). The coupled
+tail fraction (\eqref{eq:reading}: $4.09 \to 3.35 \to 2.91$ for $f = 0.1 \to 0.3$), and the coupled
 quartic tracks this slide almost exactly ($4.64/3.24/2.76$ at $\lambda{=}0.1$; $4.40/3.31/2.85$ at
-$\lambda{=}0.2$), the clearest single signature that the excluded-class systems are read as
-light-tailed shapes; mixed-phase readings also decrease in $f$ but sit systematically above the
+$\lambda{=}0.2$): the clearest single signature that the excluded-class systems are read as
+light-tailed shapes. Mixed-phase readings also decrease in $f$, but they sit systematically above the
 exponential curve at the operative $f = 0.2$ (Fig.~\ref{fig:fsweep}). All headline comparisons in
-this paper are at fixed $f = 0.2$; $f$-dependence is reported so that no constant is mistaken for a
-window-free number.
+this paper are made at fixed $f = 0.2$; we report the $f$-dependence separately so that no constant
+here is mistaken for a window-free number.
 
 \begin{figure}[t]
 \centering
@@ -578,48 +577,48 @@ the same canonical system.}\\
 \end{tabular}
 \end{table}
 
-Table~\ref{tab:systems} assembles the eleven ensembles under one pipeline. Three structures stand
+Table~\ref{tab:systems} assembles the eleven ensembles under one pipeline, and three structures stand
 out.
 
-\paragraph{(i) A shape dichotomy.} Every mixed-phase ensemble --- six double-pendulum ensembles
-across three geometries and two orders of magnitude in $n$, plus the standard map at $K = 1$ ---
-has a broad ($\cv = 0.59$--$0.77$), nearly symmetric (skew $-0.06$ to $+0.47$), \emph{platykurtic}
-(excess kurtosis $-1.0$ to $-1.3$) chaotic FTLE bulk: a flat-topped distribution, qualitatively the
+\paragraph{(i) A shape dichotomy.} Every mixed-phase ensemble, six double-pendulum ensembles across
+three geometries and two orders of magnitude in $n$, plus the standard map at $K = 1$, has a broad
+($\cv = 0.59$--$0.77$), nearly symmetric (skew $-0.06$ to $+0.47$), \emph{platykurtic} (excess
+kurtosis $-1.0$ to $-1.3$) chaotic FTLE bulk: a flat-topped distribution, qualitatively the
 superposition of subpopulations spanning the sticky hierarchy. Every non-mixed ensemble is the
-opposite: either extremely narrow ($\cv = 0.025$--$0.06$; Lorenz, $K{=}5$ --- strong
+opposite, either extremely narrow ($\cv = 0.025$--$0.06$; Lorenz, $K{=}5$, reflecting strong
 self-averaging at long horizons) or heavily skewed and \emph{leptokurtic} (excess kurtosis $+18$ to
 $+43$; the near-regular quartic). \emph{The sign of the excess kurtosis alone separates the classes
 in all eleven cases.}
 
 \paragraph{(ii) Opposite sides of the exponential fixed point.} On the independent production values,
-every mixed-phase cascade limit lies \emph{above} $\eta_{0.2}(\Exp) = 3.3494$
-($3.710$--$4.382$) and every non-mixed limit lies \emph{below} it ($3.031$--$3.312$). The class
-means are $3.876$ vs.\ $3.155$ (gap $0.721$; Welch $p = 6.2\times10^{-5}$; Cohen's $d = 3.33$).
-A random-effects decomposition of the \emph{within}-class spread finds it statistically
-indistinguishable from the estimator noise floor: for the 64-cell double-pendulum parameter map
-($n = 5\times10^{5}$ per cell), between-cell $\tau^2 = 0.0017$ with bootstrap CI $[0, 0.0123]$
-(43\% of resamples exactly zero), Cochran $Q$ $p = 0.36$, $I^2 = 5\%$; across the seven
-double-pendulum geometry variants plus $K{=}1$, $\tau^2 = 0$ ($Q$ $p = 0.55$); and the apparent
-per-geometry residual fails a decisive cross-$n$ reproducibility test (correlation between
-independent $n = 5\times10^{4}$ and $5\times10^{5}$ measurements $r = 0.035$, vs.\ $0.29$ expected
-were it real). Within-class, the data are consistent with \emph{hard} universality at fixed
-protocol; the only genuine, system-explained structure is the discrete class boundary. Consistently,
-the $\alpha^*(m,\ell)$ landscape over a $8\times8$ double-pendulum parameter grid is a flat plateau
-at $3.896\,[3.850, 3.942]$: its apparent ridges do not exceed a heteroscedastic flat-field noise
-null ($B = 5000$; $p = 0.48$--$0.92$ across thresholds), and $4/4$ high-$\alpha^*$ interior cells
-have same-sign Hessian eigenvalues (peak/noise geometry, not ridge).
+every mixed-phase cascade limit lies \emph{above} $\eta_{0.2}(\Exp) = 3.3494$ ($3.710$--$4.382$), and
+every non-mixed limit lies \emph{below} it ($3.031$--$3.312$). The class means are $3.876$ vs.\
+$3.155$ (gap $0.721$; Welch $p = 6.2\times10^{-5}$; Cohen's $d = 3.33$). A random-effects
+decomposition of the \emph{within}-class spread finds it statistically indistinguishable from the
+estimator noise floor. For the 64-cell double-pendulum parameter map ($n = 5\times10^{5}$ per cell),
+between-cell $\tau^2 = 0.0017$ with bootstrap CI $[0, 0.0123]$ (43\% of resamples exactly zero),
+Cochran $Q$ $p = 0.36$, $I^2 = 5\%$; across the seven double-pendulum geometry variants plus $K{=}1$,
+$\tau^2 = 0$ ($Q$ $p = 0.55$); and the apparent per-geometry residual fails a decisive cross-$n$
+reproducibility test (correlation between independent $n = 5\times10^{4}$ and $5\times10^{5}$
+measurements $r = 0.035$, vs.\ $0.29$ expected were it real). Within-class, the data are consistent
+with \emph{hard} universality at fixed protocol, and the only genuine, system-explained structure is
+the discrete class boundary. Consistently, the $\alpha^*(m,\ell)$ landscape over an $8\times8$
+double-pendulum parameter grid is a flat plateau at $3.896\,[3.850, 3.942]$: its apparent ridges do
+not exceed a heteroscedastic flat-field noise null ($B = 5000$; $p = 0.48$--$0.92$ across
+thresholds), and $4/4$ high-$\alpha^*$ interior cells have same-sign Hessian eigenvalues (peak/noise
+geometry, not ridge).
 
 \paragraph{(iii) The matched-Gaussian null.} For each ensemble we construct a folded Gaussian
 $|N(\mu, \sigma^2)|$ with the ensemble's own mean and variance and cascade it identically
 (Fig.~\ref{fig:matched}). Mixed-phase ensembles read \emph{above} their null in all seven cases
-(plateau excess $+0.12$ to $+0.58$); non-mixed ensembles read \emph{below} theirs in all four
+(plateau excess $+0.12$ to $+0.58$), and non-mixed ensembles read \emph{below} theirs in all four
 (excess $-0.30$ to $-1.20$): $11/11$ correct signs (two-sided sign test $p = 0.001$; collapsing
 repeated measurements of the same system, $8/8$, $p = 0.008$). The per-level picture
-(Fig.~\ref{fig:matched}) is sharper still: the double pendulum enters the cascade at its
+(Fig.~\ref{fig:matched}) is sharper still. The double pendulum enters the cascade at its
 Gaussian-bulk level-zero value but then rides \emph{persistently above} the universal Gaussian flow
-(excess $+1.5, +0.7, +0.6, +0.4, +0.4$ at levels 1--5, decaying geometrically) --- a positive,
-reproducible imprint of non-Gaussian structure that differencing only slowly destroys --- whereas
-the leptokurtic ensembles fall away \emph{below} their nulls. The matched null also validates
+(excess $+1.5, +0.7, +0.6, +0.4, +0.4$ at levels 1--5, decaying geometrically), a positive,
+reproducible imprint of non-Gaussian structure that differencing only slowly destroys, whereas the
+leptokurtic ensembles fall away \emph{below} their nulls. The matched null also validates
 Proposition~\ref{prop:gauss0} directly (predicted vs.\ measured $\alpha_0$ spanning $5.5/5.8$ to
 $75.5/76.4$).
 
@@ -640,33 +639,32 @@ red). Mixed-phase ensembles sit above their nulls, non-mixed below: $11/11$ sign
 \label{fig:summary}
 \end{figure}
 
-\paragraph{The matched-protocol control.} The comparison sharpest against confounds is internal to
+\paragraph{The matched-protocol control.} The sharpest comparison against confounds is internal to
 the standard map: $K = 1$ versus $K = 5$ share the map, the integrator, the iteration count, the
-sample size and the estimator, and differ only in phase-space character. They land on opposite
+sample size and the estimator, and differ only in phase-space character. Yet they land on opposite
 sides of the fixed point ($4.31$ vs.\ $2.52$ plateau; $4.382$ vs.\ $3.038$ production), with opposite
-kurtosis signs ($-1.0$ vs.\ $+37.7$) and opposite matched-null excess signs. Phase-space character,
-not protocol, drives the split.
+kurtosis signs ($-1.0$ vs.\ $+37.7$) and opposite matched-null excess signs. It is phase-space
+character, not protocol, that drives the split.
 
 %======================================================================
 \section{The metastable origin of ``$\alpha^* \approx 4$''}\label{sec:metastable}
 
 If the exponential is the unique fixed point (Theorem~\ref{thm:exp}), what are the class values
-$3.9$ and $3.0$--$3.3$? The deep-cascade experiment answers: \emph{plateau readings on slow
+$3.9$ and $3.0$--$3.3$, then? The deep-cascade experiment answers: \emph{plateau readings on slow
 manifolds}.
 
-Seeding the cascade with $1.6\times10^{7}$ points (20 usable levels) we track both $\alpha_k$ and
+Seeding the cascade with $1.6\times10^{7}$ points (20 usable levels), we track both $\alpha_k$ and
 the Kolmogorov distance $d_k$ of the mean-normalized level-$k$ sample to $\Exp(1)$
 (Fig.~\ref{fig:slowmanifold}). The exponential control stays at $d_k \approx 10^{-3}$ (pure
-sampling noise growing as $n_k^{-1/2}$) with $\alpha_k$ flat at $3.35$. The Gaussian-seeded flow
-collapses fast at first ($d_0 = 0.34 \to d_5 = 0.033$) and then \emph{stalls}: $d_k$ decreases by
-only $\sim 5\%$ per level across levels 5--13 while $\alpha_k$ drifts $3.77 \to 3.57 \to 3.30$
-(levels 5/10/15), i.e.\ $\approx -0.04$ per level through precisely the empirically celebrated
-range. There is no second fixed point --- there is a nearly-degenerate direction of the flow. The
-double-pendulum plateau's own $n$-dependence ($4.64 \to 4.12 \to 3.88$ across
-$n = 5\times10^{4} \to 5\times10^{6}$: more sample $\Rightarrow$ more usable levels
-$\Rightarrow$ further down the manifold) is the same drift seen through the window of available
-levels, as is the spread of the three independent double-pendulum pipeline values
-($3.71/4.17/4.26$).
+sampling noise growing as $n_k^{-1/2}$) with $\alpha_k$ flat at $3.35$. The Gaussian-seeded flow, by
+contrast, collapses fast at first ($d_0 = 0.34 \to d_5 = 0.033$) and then \emph{stalls}: $d_k$
+decreases by only $\sim 5\%$ per level across levels 5--13, while $\alpha_k$ drifts
+$3.77 \to 3.57 \to 3.30$ (levels 5/10/15), i.e.\ $\approx -0.04$ per level, through precisely the
+empirically celebrated range. There is no second fixed point here, only a nearly-degenerate
+direction of the flow. The double-pendulum plateau's own $n$-dependence ($4.64 \to 4.12 \to 3.88$
+across $n = 5\times10^{4} \to 5\times10^{6}$: more sample means more usable levels, which means
+further down the manifold) is the same drift seen through the window of available levels, as is the
+spread of the three independent double-pendulum pipeline values ($3.71/4.17/4.26$).
 
 \begin{figure}[t]
 \centering
@@ -677,15 +675,15 @@ collapse, then a stall at $d \approx 0.02$--$0.03$ for $\ge 8$ levels), and the 
 \label{fig:slowmanifold}
 \end{figure}
 
-Three conclusions follow. \emph{First}, ``$\alpha^* \approx 4$'' is not an asymptotic constant of
-double-pendulum dynamics; it is the reading, at the accessible depth, of a slowly relaxing
-flat-topped bulk --- the number is real, reproducible at fixed $(n, f, T)$, and \emph{protocol-indexed}.
-\emph{Second}, the level-zero companion ``$\alpha_0 \approx 8.3$'' is a bulk-width statistic
-(Proposition~\ref{prop:gauss0}), not an independent constant. \emph{Third}, what \emph{is}
-protocol-stable is relational: the class split (above vs.\ below the exponential reading), the sign
-of the matched-null excess, and the kurtosis dichotomy --- these survive every control we possess,
-including matched protocol, matched $n$, cross-$n$ reproduction, and the flat-plateau parameter
-scan. The correct statement of the original conjecture is therefore:
+Three things follow from this. First, ``$\alpha^* \approx 4$'' is not an asymptotic constant of
+double-pendulum dynamics at all; it is the reading, at the accessible depth, of a slowly relaxing
+flat-topped bulk. The number is real and reproducible at fixed $(n, f, T)$, but it is
+\emph{protocol-indexed}. Second, the level-zero companion ``$\alpha_0 \approx 8.3$'' is a bulk-width
+statistic (Proposition~\ref{prop:gauss0}), not an independent constant. Third, what actually is
+protocol-stable is relational rather than numerical: the class split (above vs.\ below the
+exponential reading), the sign of the matched-null excess, and the kurtosis dichotomy all survive
+every control we possess, including matched protocol, matched $n$, cross-$n$ reproduction, and the
+flat-plateau parameter scan. The correct statement of the original conjecture is therefore:
 \begin{quote}\itshape
 Mixed-phase Hamiltonian chaos occupies a universality class of FTLE \emph{shape} ---
 broad, near-symmetric, platykurtic --- whose cascade reading at $(f{=}0.2,\ n \le 5{\times}10^{6})$
@@ -700,42 +698,42 @@ value between them.
 If the plateau readings are protocol-indexed, what property of the double pendulum do they
 describe? A ten-horizon sweep answers with unexpected sharpness.
 
-\paragraph{The variance is frozen.} Re-measuring the canonical ensemble ($5\times10^{4}$ release
-ICs, uniform angles at rest) at $T = 5, 10, 15, 20, 30, 50, 75, 100, 150, 200$ gives a
-chaotic-subset FTLE variance of $0.298$--$0.308$ at \emph{every} horizon from $T = 15$ on: fitting
-$\mathrm{var} \sim T^{-\beta}$ over $T = 15$--$200$ yields $\beta = -0.014$ with fit RMS $0.002$.
-Normal (CLT) self-averaging predicts $\beta = 1$; even strongly anomalous averaging predicts
-$0 < \beta < 1$. The measured $\beta \approx 0$ means the dispersion is not a finite-time
+\paragraph{The variance is frozen.} Re-measuring the canonical ensemble ($5\times10^{4}$ release ICs,
+uniform angles at rest) at $T = 5, 10, 15, 20, 30, 50, 75, 100, 150, 200$ gives a chaotic-subset FTLE
+variance of $0.298$--$0.308$ at \emph{every} horizon from $T = 15$ on. Fitting
+$\mathrm{var} \sim T^{-\beta}$ over $T = 15$--$200$ yields $\beta = -0.014$ with fit RMS $0.002$,
+whereas normal (CLT) self-averaging predicts $\beta = 1$, and even strongly anomalous averaging
+predicts $0 < \beta < 1$. The measured $\beta \approx 0$ means the dispersion is not a finite-time
 fluctuation at all: \emph{the ensemble contains trajectories with genuinely different asymptotic
 exponents}. Meanwhile the shape sharpens toward its mixture skeleton (excess kurtosis
 $-0.46 \to -1.59$, saturating; $\cv$ constant at $0.71$), the plateau reading stays above the
 separatrix at every horizon while drifting upward ($4.25 \to 5.26$), and the matched-null excess
-grows monotonically ($+0.21 \to +1.28$): as within-component noise dies, the non-Gaussian mixture
-structure emerges more strongly. (At $T \le 10$ the chaotic/regular separation is
-threshold-limited; those points are reported but excluded from fits.)
+grows monotonically ($+0.21 \to +1.28$). As within-component noise dies away, in other words, the
+non-Gaussian mixture structure only emerges more strongly. (At $T \le 10$ the chaotic/regular
+separation is threshold-limited; those points are reported but excluded from fits.)
 
 \paragraph{The ensemble is a double mixture.} The canonical protocol releases from rest, so every
 trajectory carries the energy of its release point, $E(\theta_1, \theta_2) = -g\,(2\cos\theta_1 +
-\cos\theta_2)$ (canonical masses/lengths): the ensemble spans a continuum of energy shells. Using
-the $100\times100$ FTLE grid over release angles (a legacy-lineage dataset; used here only for
-internal contrasts), binning the chaotic subset by release energy shows a systematic
-$\lambda(E)$ trend that explains $\eta^2 = 0.41$--$0.43$ of the FTLE variance (40--160 bins). The
-remaining $59\%$ is \emph{within}-shell dispersion --- and the horizon sweep shows the total is
-frozen, so the within-shell component does not self-average either: at fixed energy the phase
-space is itself mixed (islands, sticky layers, possibly several stochastic components), and the
-ensemble is a mixture over those invariant structures as well.
+\cos\theta_2)$ (canonical masses/lengths), and the ensemble spans a continuum of energy shells. Using
+the $100\times100$ FTLE grid over release angles (a legacy-lineage dataset, used here only for
+internal contrasts), binning the chaotic subset by release energy shows a systematic $\lambda(E)$
+trend that explains $\eta^2 = 0.41$--$0.43$ of the FTLE variance (40--160 bins). The remaining $59\%$
+is \emph{within}-shell dispersion, and since the horizon sweep shows the total is frozen, the
+within-shell component does not self-average either: at fixed energy the phase space is itself mixed
+(islands, sticky layers, possibly several stochastic components), so the ensemble is a mixture over
+those invariant structures as well.
 
 \paragraph{Energy bands recapitulate the taxonomy.} The per-band FTLE shapes reproduce the entire
-two-class phenomenology \emph{inside one system}: near the bottom of the release range
+two-class phenomenology \emph{inside one system}. Near the bottom of the release range
 ($E \approx -18.5$, where chaos is a thin layer) the band is strongly leptokurtic and right-skewed
-(skew $+2.3$, excess kurtosis $+9.0$) --- the non-mixed, thin-web signature; mid-range bands
-($E \approx -8$ to $+2$) are broad and platykurtic ($-0.9$ to $-1.1$) --- the mixed-phase
-signature, now manifestly \emph{at fixed energy}, so it is dynamical rather than an artifact of
-shell mixing; and the highest bands ($E \approx +24$, nearly uniformly chaotic shells) narrow
-toward Gaussian ($\cv\ 0.24$, excess kurtosis $-0.26$) --- approaching the self-averaging class. A
-band-Gaussian mixture reconstruction ($\lambda$-band mean plus band-width noise) reproduces the
-broad platykurtic character only partially ($\cv\ 0.61$ vs.\ $0.71$), confirming residual
-within-band structure beyond band-Gaussianity.
+(skew $+2.3$, excess kurtosis $+9.0$), the non-mixed, thin-web signature. Mid-range bands
+($E \approx -8$ to $+2$) are broad and platykurtic ($-0.9$ to $-1.1$), the mixed-phase signature, now
+manifestly \emph{at fixed energy}, so it is dynamical rather than an artifact of shell mixing. And
+the highest bands ($E \approx +24$, nearly uniformly chaotic shells) narrow toward Gaussian
+($\cv\ 0.24$, excess kurtosis $-0.26$), approaching the self-averaging class. A band-Gaussian mixture
+reconstruction ($\lambda$-band mean plus band-width noise) reproduces the broad platykurtic character
+only partially ($\cv\ 0.61$ vs.\ $0.71$), confirming residual within-band structure beyond
+band-Gaussianity.
 
 \begin{figure}[t]
 \centering
@@ -748,25 +746,25 @@ explaining $\eta^2 = 0.41$ of the variance; the bands themselves span the two-cl
 \label{fig:ensemble}
 \end{figure}
 
-The synthesis: \emph{the celebrated double-pendulum constants are frozen statistics of a
-non-ergodic ensemble} --- a mixture over energy shells and, within shells, over coexisting
-invariant structures. They are reproducible at fixed protocol (hence the hard within-class
-universality of \S\ref{sec:twoclass}) and drift lawfully with protocol ($T$, $n$, $f$), because
-they are readings of a mixture's shape through a marginal renormalization flow, not spectral
-invariants of a single orbit family. The standard-map pair, which has no energy to mix, shows the
-purely dynamical version of the same dichotomy; the pendulum shows both layers at once.
+Putting this together: \emph{the celebrated double-pendulum constants are frozen statistics of a
+non-ergodic ensemble}, a mixture over energy shells and, within shells, over coexisting invariant
+structures. They are reproducible at fixed protocol (hence the hard within-class universality of
+\S\ref{sec:twoclass}) and drift lawfully with protocol ($T$, $n$, $f$), precisely because they are
+readings of a mixture's shape through a marginal renormalization flow, not spectral invariants of a
+single orbit family. The standard-map pair, which has no energy to mix, shows the purely dynamical
+version of the same dichotomy; the pendulum shows both layers at once.
 
 %======================================================================
 \section{Out-of-sample test: H\'enon--Heiles across its transition}\label{sec:hh}
 
-The two-class classifier makes a falsifiable prediction: \emph{any} mixed-phase
-Hamiltonian should present a platykurtic FTLE bulk and read above its matched-Gaussian null, and
-the H\'enon--Heiles system \cite{henonheiles} at intermediate energy was named explicitly. We then
+The two-class classifier makes a falsifiable prediction: \emph{any} mixed-phase Hamiltonian should
+present a platykurtic FTLE bulk and read above its matched-Gaussian null. We named the
+H\'enon--Heiles system \cite{henonheiles} at intermediate energy explicitly as a test case, then
 built the experiment: a Yoshida-4 symplectic, variational-Benettin FTLE engine for
 $V(x,y) = \tfrac12(x^2{+}y^2) + x^2y - \tfrac13 y^3$ (initial conditions sampled exactly on the
 energy shell, $\max|H - E| = 6\times10^{-17}$; escape-guarded; $n = 2.5\times10^{5}$ per energy,
-$T = 800$, $\mathrm{d}t = 5\times10^{-3}$), sweeping the energy knob that morphs its phase space
-from integrable-like to almost fully chaotic.
+$T = 800$, $\mathrm{d}t = 5\times10^{-3}$), sweeping the energy knob that morphs its phase space from
+integrable-like to almost fully chaotic.
 
 \begin{table}[t]
 \centering\small
@@ -798,67 +796,66 @@ exactly where the mixed sea floods phase space ($E = 0.125$), returns negative a
 \label{fig:hh}
 \end{figure}
 
-Three regimes emerge (Table~\ref{tab:hh}). \emph{The predicted transition is observed:} at
+Three regimes emerge (Table~\ref{tab:hh}). The predicted transition is there to see: at
 $E = 0.100$ the chaotic component is a thin web ($5.7\%$) and reads \emph{below} its null with a
-near-Gaussian band shape; at $E = 0.125$, where the classical transition floods half of phase
+near-Gaussian band shape, while at $E = 0.125$, where the classical transition floods half of phase
 space, the bulk turns platykurtic (excess kurtosis $-0.36 \to -0.81$) and the reading flips
-\emph{above} the null --- the mixed-phase signature switching on exactly where islands and sea
-begin to coexist at scale. \emph{The taxonomy's far side also appears:} by $E = 0.150$ the sea
-dominates ($82\%$), the bulk narrows and becomes left-skewed leptokurtic (skew $-1.39$, excess
-kurtosis $+2.96$ --- the same signature as the fully chaotic standard map at $K{=}5$), and the
-reading drops back below the null, as self-averaging predicts. \emph{And the sweep exposes a
-boundary case the two-class taxonomy does not cover:} at the escape energy $E = 1/6$, where the
-potential's saddles open and trajectories linger near marginally-open channels, the reading flips
-above the null again despite a leptokurtic bulk --- a strong-stickiness regime at the edge of
-transient chaos \cite{kantzgrassberger}, flagged here as an open case rather than forced into either
-class. The level-zero
-law of Proposition~\ref{prop:gauss0} passes its own check en route: at the most Gaussian energy
+\emph{above} the null, the mixed-phase signature switching on exactly where islands and sea begin to
+coexist at scale. The taxonomy's far side shows up too: by $E = 0.150$ the sea dominates ($82\%$),
+the bulk narrows and becomes left-skewed leptokurtic (skew $-1.39$, excess kurtosis $+2.96$, the same
+signature as the fully chaotic standard map at $K{=}5$), and the reading drops back below the null,
+as self-averaging predicts. And the sweep turns up a boundary case the two-class taxonomy does not
+cover: at the escape energy $E = 1/6$, where the potential's saddles open and trajectories linger
+near marginally-open channels, the reading flips above the null again despite a leptokurtic bulk, a
+strong-stickiness regime at the edge of transient chaos \cite{kantzgrassberger} that we flag here as
+an open case rather than forcing it into either class. The level-zero law of
+Proposition~\ref{prop:gauss0} passes its own check along the way: at the most Gaussian energy
 ($E = 0.100$: skew $+0.5$, kurtosis $-0.4$) it predicts $\alpha_0 = 10.1$ against the measured
 $9.98$, while the skewed/kurtotic energies deviate exactly where the first-order law should fail.
-Finally, the sweep retires a documentary loose end of the source program: a claimed
-``$\alpha_0 = 8.342$ at $E = 0.150$'' (already withdrawn in the source's final papers) is not
-reproducible --- we measure $18.65$ at this protocol, and \S\ref{sec:ensemble} shows $\alpha_0$ is
-a horizon-indexed bulk-width statistic in any case ($5.6 \to 14.9$ across $T$ for the pendulum),
-so no protocol-free value of it exists to confirm.
+Finally, the sweep retires a loose end from the source program's documentation: a claimed
+``$\alpha_0 = 8.342$ at $E = 0.150$'' (already withdrawn in the source's final papers) does not
+reproduce; we measure $18.65$ at this protocol, and \S\ref{sec:ensemble} shows $\alpha_0$ is a
+horizon-indexed bulk-width statistic in any case ($5.6 \to 14.9$ across $T$ for the pendulum), so no
+protocol-free value of it exists to confirm.
 
 %======================================================================
 \section{Dynamical mechanism, interpretation, and predictions}\label{sec:mechanism}
 
 \paragraph{Why platykurtic?} A mixed phase space at moderate horizon is a \emph{superposition}: the
 chaotic sea's core produces FTLEs near the ergodic mean, while the hierarchy of sticky boundary
-layers \cite{zaslavsky,meiss,cristadoro} contributes subpopulations at depressed exponents ---
+layers \cite{zaslavsky,meiss,cristadoro} contributes subpopulations at depressed exponents, i.e.\
 trajectories that spent part of the window trapped. Superposing subpopulations with displaced means
-broadens and \emph{flattens} the mixture (variance mixing drives kurtosis below Gaussian), exactly
-the $\cv \approx 0.6$--$0.8$, excess-kurtosis $\approx -1.2$ shape measured here for every
-mixed-phase ensemble. Absent islands, the mechanism is gone: strongly chaotic or dissipative systems
-self-average (correlations decay fast; the FTLE is a $T$-average of a rapidly mixing observable),
-giving narrow bulks whose residual shape is set by rare fluctuations --- hence small $\cv$ with
-skewed, leptokurtic corrections (Lorenz, $K{=}5$), while near-regular dynamics piles FTLEs at the
-regular floor with a thin upper structure (quartic: skew $+1.1$ to $+5.3$). Section
-\ref{sec:ensemble} unifies the picture: in every case the platykurtic broad bulk is the signature
-of a \emph{non-ergodic ensemble} --- a superposition over invariant structures with distinct
-exponents, whether energy shells (the pendulum's release protocol), islands versus sea (the
-standard map at $K = 1$), or sticky sublayers within one shell. The FTLE \emph{distribution shape}
-is thus a direct, cheap probe of the ensemble's ergodic architecture, requiring no phase-space
-sections (cf.\ the shape-based predictability program of \cite{vallejo}), and the cascade --- with
-its exactly known exponential reference --- is a sensitive one-number readout of that shape. That the
+broadens and \emph{flattens} the mixture, since variance mixing drives kurtosis below Gaussian,
+which is exactly the $\cv \approx 0.6$--$0.8$, excess-kurtosis $\approx -1.2$ shape measured here for
+every mixed-phase ensemble. Take the islands away and the mechanism disappears: strongly chaotic or
+dissipative systems self-average (correlations decay fast, and the FTLE is a $T$-average of a
+rapidly mixing observable), giving narrow bulks whose residual shape is set by rare fluctuations,
+hence small $\cv$ with skewed, leptokurtic corrections (Lorenz, $K{=}5$), while near-regular dynamics
+piles FTLEs at the regular floor with a thin upper structure (quartic: skew $+1.1$ to $+5.3$).
+Section~\ref{sec:ensemble} unifies the picture: in every case the platykurtic broad bulk is the
+signature of a \emph{non-ergodic ensemble}, a superposition over invariant structures with distinct
+exponents, whether energy shells (the pendulum's release protocol), islands versus sea (the standard
+map at $K = 1$), or sticky sublayers within one shell. The FTLE \emph{distribution shape} is thus a
+direct, cheap probe of the ensemble's ergodic architecture, requiring no phase-space sections (cf.\
+the shape-based predictability program of \cite{vallejo}), and the cascade, with its exactly known
+exponential reference, gives a sensitive one-number readout of that shape. That the
 \emph{fluctuations} of finite-time exponents, far more than their mean, carry this dynamical
 information has a clear precedent: Tomsovic and Lakshminarayan showed that the variance and higher
 cumulants of the finite-time stability exponent in the standard map exhibit anomalous time-scalings
 that detect regular islands as small as $0.01\%$ of phase space \cite{tomsovic}. Our approach is
-complementary but distinct in three respects: we act on the \emph{entire distribution shape} through
-an exactly-solvable renormalization operator rather than on low-order cumulant scalings; we obtain a
+complementary but distinct in three respects. We act on the \emph{entire distribution shape} through
+an exactly-solvable renormalization operator rather than on low-order cumulant scalings. We obtain a
 \emph{discrete two-class split} across five distinct systems, with the exponential distribution as an
-exact separatrix; and we trace the reported ``$\alpha^*\approx4$'' constant to a metastable plateau of
+exact separatrix. And we trace the reported ``$\alpha^*\approx4$'' constant to a metastable plateau of
 that operator.
 
 \paragraph{Relation to extreme-value theory.} The dichotomy echoes, but is not reducible to, the
 Fisher--Tippett--Gnedenko trichotomy \cite{fisher,gnedenko,embrechts}: the exponential is
-simultaneously the Gumbel-domain excess law (Pickands--Balkema--de Haan
-\cite{pickands,balkema}) and the unique fixed point of pair-differencing (Puri--Rubin
-\cite{purirubin}). The cascade replaces threshold excess by iterated differencing --- a
-renormalization semigroup in the spirit of \cite{feigenbaum} whose fixed-point structure appears
-new; its slow manifolds, not its fixed point, carry the physics observed at finite depth.
+simultaneously the Gumbel-domain excess law (Pickands--Balkema--de Haan \cite{pickands,balkema}) and
+the unique fixed point of pair-differencing (Puri--Rubin \cite{purirubin}). The cascade replaces
+threshold excess by iterated differencing, a renormalization semigroup in the spirit of
+\cite{feigenbaum} whose fixed-point structure appears to be new; it is the slow manifolds, not the
+fixed point itself, that carry the physics observed at finite depth.
 
 \paragraph{Predictions --- two now tested.} The two-class picture makes five falsifiable predictions;
 two are tested here.
@@ -884,23 +881,23 @@ architecture, not by the system's name.
 
 \paragraph{Open mathematical problems.} (i)~Spectral analysis of $T$ linearized at $\Exp$: our
 numerics indicate a nearly-degenerate contraction ($d_k$ shrinking $\sim 5\%$/level along the
-Gaussian manifold); identify the slow eigenfunction and its eigenvalue. (ii)~Classification of fixed
-shapes of $|A - B| \eqd cX$ for $c < 1$ (the $c = 1$ case is \cite{purirubin}). (iii)~A quantitative
-map from island-hierarchy exponents (e.g.\ the universal recurrence decay $z \approx 1.57$
-\cite{cristadoro}) to the platykurtic FTLE shape and its cascade excess. (iv)~The empirical decay
-constant $r \approx 0.46$--$0.51$ of the mixed-phase excess: derived, it would make the plateau
-value itself computable.
+Gaussian manifold), and it remains to identify the slow eigenfunction and its eigenvalue.
+(ii)~Classification of fixed shapes of $|A - B| \eqd cX$ for $c < 1$ (the $c = 1$ case is
+\cite{purirubin}). (iii)~A quantitative map from island-hierarchy exponents (e.g.\ the universal
+recurrence decay $z \approx 1.57$ \cite{cristadoro}) to the platykurtic FTLE shape and its cascade
+excess. (iv)~The empirical decay constant $r \approx 0.46$--$0.51$ of the mixed-phase excess: were
+it derived, it would make the plateau value itself computable.
 
 %======================================================================
 \section{A number-theoretic audit of the constants}\label{sec:numbers}
 
-Every constant in this study was swept against a curated library of $67$ named mathematical constants
+We swept every constant in this study against a curated library of $67$ named mathematical constants
 (transcendentals and their simple combinations; the Euler--Mascheroni, golden-ratio, Ap\'ery,
 Catalan, Khinchin and Glaisher--Kinkelin constants; Riemann zeta values; the Feigenbaum and
 random-matrix-theory families; and KAM/standard-map constants), $159$ low-order rationals $m/n$
 ($m,n\le16$) and the integers up to $1024$, together with integer-relation (PSLQ) tests (\texttt{mpmath},
 maximum coefficient $10^{9}$, $30$-digit working precision) on the reported constant triplets, at
-match tiers $\tau_1/\tau_2/\tau_3 = 0.3\%/0.03\%/0.001\%$; we report the audit so that no
+match tiers $\tau_1/\tau_2/\tau_3 = 0.3\%/0.03\%/0.001\%$. We report the full audit so that no
 numerological reading survives by omission.
 
 \begin{itemize}\itemsep2pt
@@ -943,29 +940,29 @@ problem, and we explicitly do \emph{not} assign it a closed form.
 %======================================================================
 \section{Conclusions}\label{sec:conclusions}
 
-A renormalization cascade that arose as an exploratory data-analysis device turns out to possess
-exact structure: a unique exponential fixed point with a derivable, window-indexed reading
-($3.3494$ at $f = 0.2$); a one-step universal collapse of all Gaussian bulks; an exact cumulant
-flow under symmetrization (odd cumulants annihilated, standardized even cumulants scaled by
+A renormalization cascade that started life as an exploratory data-analysis device turns out to have
+exact structure underneath it: a unique exponential fixed point with a derivable, window-indexed
+reading ($3.3494$ at $f = 0.2$); a one-step universal collapse of all Gaussian bulks; an exact
+cumulant flow under symmetrization (odd cumulants annihilated, standardized even cumulants scaled by
 $2^{1-m}$) that derives the source program's ``universal'' decay constant $r \approx 1/2$; a
-closed-form linearized eigenfamily $\mu(s) = 2/(2-s)$ sitting atop a unit-diagonal polynomial
-tower --- a gapless, non-normal structure whose measured consequence is algebraic relaxation and
-metastable plateaus; and provable asymptotic tail conservation that finite windows never see.
-Recast on this foundation, a large-scale computational claim of a new universal constant
-``$\alpha^* \approx 4$'' of double-pendulum chaos resolves into something both humbler and more
-interesting. The constant is a plateau reading of a marginal flow, taken on an ensemble whose
-dispersion never self-averages ($\beta \approx 0$ across a $13\times$ range of horizons) because
-the canonical protocol builds a mixture --- over energy shells, and within shells over coexisting
-invariant structures --- whose bands internally recapitulate the very taxonomy found across
-systems. The universality that survives lives one level up: mixed-phase ensembles ---
-identifiable by broad, flat-topped, platykurtic FTLE bulks --- read strictly above the exponential
-separatrix; fully chaotic, dissipative and near-regular ensembles --- narrow or skewed,
-leptokurtic --- read below it, in eleven of eleven archetypal ensembles across five systems,
-surviving a same-map/same-protocol control, a zero-within-class-heterogeneity meta-analysis, and
+closed-form linearized eigenfamily $\mu(s) = 2/(2-s)$ sitting atop a unit-diagonal polynomial tower,
+a gapless, non-normal structure whose measured consequence is algebraic relaxation and metastable
+plateaus; and provable asymptotic tail conservation that finite windows never actually see. Recast on
+this foundation, a large-scale computational claim of a new universal constant ``$\alpha^* \approx
+4$'' of double-pendulum chaos resolves into something both humbler and more interesting than
+advertised. The constant turns out to be a plateau reading of a marginal flow, taken on an ensemble
+whose dispersion never self-averages ($\beta \approx 0$ across a $13\times$ range of horizons)
+because the canonical protocol builds a mixture, over energy shells, and within shells over
+coexisting invariant structures, whose bands internally recapitulate the very taxonomy found across
+systems. The universality that survives lives one level up: mixed-phase ensembles, identifiable by
+broad, flat-topped, platykurtic FTLE bulks, read strictly above the exponential separatrix, while
+fully chaotic, dissipative and near-regular ensembles, narrow or skewed and leptokurtic, read below
+it. This holds in eleven of eleven archetypal ensembles across five systems, survives a
+same-map/same-protocol control and a zero-within-class-heterogeneity meta-analysis, and holds up in
 an out-of-sample H\'enon--Heiles sweep that flips sign on cue at the thin-web $\to$ mixed-sea
-transition (and honestly flags one boundary regime, the escape energy, as beyond the taxonomy).
-The finite-time Lyapunov distribution's shape, read through an operator with an exactly known
-reference point, is a practical probe of the ergodic architecture of an ensemble --- and the
+transition (while honestly flagging one boundary regime, the escape energy, as beyond the taxonomy).
+The shape of the finite-time Lyapunov distribution, read through an operator with an exactly known
+reference point, turns out to be a practical probe of an ensemble's ergodic architecture, and the
 exponential distribution, once again, sits at the center of the story.
 
 \paragraph{Acknowledgments.} The double-pendulum investigation that grew into this study was
